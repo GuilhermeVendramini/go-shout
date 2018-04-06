@@ -82,23 +82,23 @@ func main() {
 	 * for messages are user (string) and text (string). Timestamp is added on
 	 * the server. Messages are inserted to database and broadcasted via Websocket.
 	**/
-	r.POST("api/post", func(c *gin.Context) {
-		if c.Query("user") == "" || c.Query("text") == "" {
-			log.Print("Invalid message.")
-			return
-		}
-		var message Message
-		message.User = c.Query("user")
-		message.Text = c.Query("text")
-		message.Timestamp = time.Now()
-		if c.Query("ip") != "" {
-			message.Ip = c.Query("ip")
-		}
-		db.Insert(message)
-		msg, _ := json.Marshal(message)
-		m.Broadcast(msg)
-		c.JSON(200, bson.M{})
-	})
+	// r.POST("api/post", func(c *gin.Context) {
+	// 	if c.Query("user") == "" || c.Query("text") == "" {
+	// 		log.Print("Invalid message.")
+	// 		return
+	// 	}
+	// 	var message Message
+	// 	message.User = c.Query("user")
+	// 	message.Text = c.Query("text")
+	// 	message.Timestamp = time.Now()
+	// 	if c.Query("ip") != "" {
+	// 		message.Ip = c.Query("ip")
+	// 	}
+	// 	db.Insert(message)
+	// 	msg, _ := json.Marshal(message)
+	// 	m.Broadcast(msg)
+	// 	c.JSON(200, bson.M{})
+	// })
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
 		var message Message
